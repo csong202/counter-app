@@ -12,7 +12,8 @@ class App extends Component {
       {id: 2, value: 0},
       {id: 3, value: 0},
       {id: 4, value: 0}
-    ]
+    ],
+    lastId: 4
   };
 
   constructor() {
@@ -57,6 +58,21 @@ class App extends Component {
     this.setState({counters});
   }
 
+  handleAdd = () => {
+    console.log("\nADD, last id", this.state.lastId);
+    const newLastId = this.state.lastId + 1;
+    var counters = [...this.state.counters];
+    counters.push({id: newLastId, value: 0});
+    // const prevCounters = [...this.state.counters];
+    // console.log("prevCounters.length", prevCounters.length);
+    // let counters = [prevCounters, {key: newLastId, id: newLastId, value: 0}];
+    this.setState((state, props) => ({
+      counters: counters,
+      lastID: newLastId
+    }));
+    console.log("this.state.lastId", this.state.lastId);
+  }
+
   handleDelete = (counterID) => {
     console.log("deleting counter #", counterID);
     const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
@@ -74,6 +90,7 @@ class App extends Component {
             onReset={this.handleReset}
             onIncrement={this.handleIncrement}
             onDecrement={this.handleDecrement}
+            onAdd={this.handleAdd}
             onDelete={this.handleDelete}
           />
         </main>
