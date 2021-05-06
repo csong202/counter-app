@@ -36,6 +36,18 @@ class App extends Component {
     this.setState({counters})
   }
 
+  handleDecrement = counter => {
+    console.log("\nDECREMENT");
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    counters[index] = {...counter};
+    let val = counters[index].value;
+    if (val > 0) {val--};
+    counters[index].value = val;
+    console.log("counter #" + index + " has a value of " + counters[index].value);
+    this.setState({counters});
+  }
+
   handleReset = () => {
     console.log("\nRESET");
     const counters = this.state.counters.map(c => {
@@ -45,19 +57,10 @@ class App extends Component {
     this.setState({counters});
   }
 
-  // handleDelete = (counterID) => {
-  //   console.log("delete called", counterID);
-  //   const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
-  //   this.setState({counters}); // equiv to this.setState({ counters: counters})
-  // }
-  handleDelete = counter => {
-    console.log("\nDELETE");
-    const counters = [...this.state.counters];
-    const index = counters.indexOf(counter);
-    console.log("deleting index " + index);
-    const newCounters = this.state.counters.filter(c => c.id !== index+1);
-    console.log(newCounters.length + " remaining counters");
-    this.setState({newCounters});
+  handleDelete = (counterID) => {
+    console.log("deleting counter #", counterID);
+    const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
+    this.setState({counters}); // equiv to this.setState({ counters: counters})
   }
 
   render() {
@@ -70,6 +73,7 @@ class App extends Component {
             counters={this.state.counters}
             onReset={this.handleReset}
             onIncrement={this.handleIncrement}
+            onDecrement={this.handleDecrement}
             onDelete={this.handleDelete}
           />
         </main>
