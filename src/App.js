@@ -12,7 +12,8 @@ class App extends Component {
       {id: 2, value: 0},
       {id: 3, value: 0},
       {id: 4, value: 0}
-    ]
+    ],
+    lastId: 4
   };
 
   constructor() {
@@ -57,6 +58,17 @@ class App extends Component {
     this.setState({counters});
   }
 
+  handleAdd = () => {
+    console.log("\nADD, last id", this.state.lastId);
+    const newLastId = this.state.lastId + 1;
+    var counters = [...this.state.counters];
+    counters.push({id: newLastId, value: 0});
+    // works with 2 separate setStates but not with 1?
+    this.setState({counters});
+    this.setState({lastId: newLastId});
+    console.log("this.state.lastId", this.state.lastId);
+  }
+
   handleDelete = (counterID) => {
     console.log("deleting counter #", counterID);
     const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
@@ -74,6 +86,7 @@ class App extends Component {
             onReset={this.handleReset}
             onIncrement={this.handleIncrement}
             onDecrement={this.handleDecrement}
+            onAdd={this.handleAdd}
             onDelete={this.handleDelete}
           />
         </main>
