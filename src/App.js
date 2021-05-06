@@ -63,13 +63,9 @@ class App extends Component {
     const newLastId = this.state.lastId + 1;
     var counters = [...this.state.counters];
     counters.push({id: newLastId, value: 0});
-    // const prevCounters = [...this.state.counters];
-    // console.log("prevCounters.length", prevCounters.length);
-    // let counters = [prevCounters, {key: newLastId, id: newLastId, value: 0}];
-    this.setState((state, props) => ({
-      counters: counters,
-      lastID: newLastId
-    }));
+    // works with 2 separate setStates but not with 1?
+    this.setState({counters});
+    this.setState({lastId: newLastId});
     console.log("this.state.lastId", this.state.lastId);
   }
 
