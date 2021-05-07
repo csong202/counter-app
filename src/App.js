@@ -40,6 +40,12 @@ class App extends Component {
     console.log("App mounted");
   }
 
+
+  /* Review comment:
+    +1 for being careful with cloning, always my advice to mutate only when absolutely necessary
+
+    I recommend you try reimplementing this with a `.map`, would be good practice for all the lodash in the InfoBase
+  */ 
   handleIncrement = counter => {
     console.log("\nINCREMENT");
     const counters = [...this.state.counters]; // cloning the counters array in the state object
@@ -50,6 +56,24 @@ class App extends Component {
     this.setState({counters})
   }
 
+  /* Review comment:
+    Safe mutation, with `let val`, but not strictly necessary. I believe, once you've tried rewriting `handleIncrement` with a `.map`,
+    you should be able to see a way to do with without the `let`.
+
+    Otherwise, here's two patterns (well, morel ike one pattern written to ways) for avoiding mutating values/leaving intermediate values in scope:
+      1) using a ternary
+        const new_val = val > 0 ? val - 1 : val;
+      2) using an immediately invoked function (sometimes written IIF)
+        const new_val = (() => {
+          if (val > 0) {
+            return val - 1;
+          } else {
+            return val;
+          }
+        })();
+
+    A ternary can be good for a evry simple case like this. An IIF is good if there's much more logic/complexity involved in determining the final return value
+  */ 
   handleDecrement = counter => {
     console.log("\nDECREMENT");
     const counters = [...this.state.counters];
