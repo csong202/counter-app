@@ -6,6 +6,19 @@ import './App.css';
 
 class App extends Component {
 
+  /* Review comment:
+    +1 for the pattern of extracting state and event handlers to a higher order component, passing that state and event callbacks down to children
+
+    Some relevant articles on this (often described as having "smart" and "dumb" components)
+      - https://medium.com/@thejasonfile/dumb-components-and-smart-components-e7b33a698d43
+      - https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0
+        - as this article points out, it shouldn't be enforced as a strict rule, and it's not as relevant when using hooks, but it is
+        still very relevant to current InfoBase code
+
+    It's an example of the general design principal called "Inversion of Control" (https://en.wikipedia.org/wiki/Inversion_of_control, 
+    google around for other descriptions if the wikipedia article isn't clear enough). Very useful. Let me know if you want me to try to explain this
+    in more depth some time.
+  */ 
   state = {
     counters: [
       {id: 1, value: 4},
