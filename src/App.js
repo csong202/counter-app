@@ -73,6 +73,18 @@ class App extends Component {
         })();
 
     A ternary can be good for a evry simple case like this. An IIF is good if there's much more logic/complexity involved in determining the final return value
+  */
+ /* Review comment:
+    Alternative note on 
+    ```
+      let val = counters[index].value;
+      if (val > 0) {val--};
+    ```
+    can rewrite this as `const new_val = Math.max(val - 1, 0);`
+
+    To turn this in to general advice, it's good to keep an eye out for logic, especially around numbers, which may actually just be a specific case of some more
+    general utility function. If you can use an existing utility, or extract the logic in to a new one (with a clear name), it can help others read the code. Sort of
+    a mental "snap to grid" effect, rather than reading and interpretting new code, they just need to see a concept they're already familliar with.
   */ 
   handleDecrement = counter => {
     console.log("\nDECREMENT");
@@ -86,6 +98,17 @@ class App extends Component {
     this.setState({counters});
   }
 
+  /* Review comment:
+    Hmm, interacting with the DOM, especially though selectors, within React is generally a "code smell". Not an outright anti-pattern,
+    since it's sensible in some cases (interacting with non-React portions of the page, i.e. the InfoBase's global header and footer which are baked 
+    in to the index html files), but always something to think twice about.
+    
+    Side note, since these are actually other React components you're interacting with here, it'd be better to some how pass down, or receive through call backs,
+    React "refs" for them. See https://reactjs.org/docs/refs-and-the-dom.html. More of a React-first way to do this. Note, the ref docs strongly recommend not using
+    them for this sort of thing though, haha.
+
+    Once I've looked more at the Counter component itself, I may have a more specific piece of advice on how to handle this reset behaviour.
+  */
   handleReset = () => {
     console.log("\nRESET");
     const counters = this.state.counters.map(c => {
@@ -100,6 +123,25 @@ class App extends Component {
     this.setState({counters});
   }
 
+  /* Review comment
+    RE: "works with 2 separate setStates but not with 1?", how were you writting that? `this.setState({counters, lastId: newLastId});` should work just fine.
+
+    Little under the hood here, but react (as of 17) batches all state changes (and, before that, it always batched multiple state changes inside event callbacks),
+    So calling setState twice vs once here should have the same result (although, if there were overlapping state changes, you'd have to think about how it's going to
+    merge the state change objects).
+
+    Note on 
+    ```
+      var counters = [...this.state.counters];
+      counters.push({id: newLastId, value: 0});
+    ```
+    Could be one line as
+    ```
+      const counters = [...this.state.counters, {id: newLastId, value: 0}];
+    ```
+
+    Object/array spread is really useful for extending arrays/merging objects etc, on top of being one way to do a clone
+  */
   handleAdd = () => {
     console.log("\nADD, last id", this.state.lastId);
     const newLastId = this.state.lastId + 1;
@@ -111,6 +153,9 @@ class App extends Component {
     console.log("this.state.lastId", this.state.lastId);
   }
 
+  /* Review comment
+    +1 for the filter, nice
+  */
   handleDelete = (counterID) => {
     console.log("deleting counter #", counterID);
     const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
