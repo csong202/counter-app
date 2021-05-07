@@ -28,11 +28,47 @@ class Counters extends Component {
             onDelete={onDelete}
             counter={counter} // counter object has value and id
           >  
-            <h6>Counter #{counter.id}</h6>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input 
+                  type="checkbox" 
+                  class="form-check-input" 
+                  defaultChecked={true} 
+                  id={this.getCheckBoxId(counter.id)}
+                  onClick={((e) => this.handleCheck(e, counter.id, counter))}
+                />Counter #{counter.id}
+              </label>
+            </div>
           </Counter>
         )}
       </div>
     );
+  }
+
+  handleCheck = (e, counterId, counter) => {
+    console.log("clicked checkbox #" + counterId);
+    var btnIncr = document.getElementById("btnIncr"+counterId);
+    var btnDecr = document.getElementById("btnDecr"+counterId);
+    var btnDel = document.getElementById("btnDel"+counterId);
+
+    if (!btnIncr.disabled) {
+      console.log("was enabled");
+      btnIncr.disabled=true;
+      btnDecr.disabled=true;
+      btnDel.disabled=true;
+    }
+    else {
+      console.log("was disabled");
+      btnIncr.disabled=false;
+      btnDecr.disabled=false;
+      btnDel.disabled=false;
+    }
+  }
+
+  getCheckBoxId(counterId) {
+    let id="check";
+    id += counterId;
+    return id;
   }
 }
 
