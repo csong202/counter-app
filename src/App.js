@@ -33,7 +33,7 @@ class App extends Component {
     const index = counters.indexOf(counter);
     counters[index] = {...counter}; // cloning the counter object in argument
     counters[index].value++;
-    console.log("counter #" + index + " has a value of " + counters[index].value);
+    console.log("counter at index " + index + " has a value of " + counters[index].value);
     this.setState({counters})
   }
 
@@ -45,7 +45,7 @@ class App extends Component {
     let val = counters[index].value;
     if (val > 0) {val--};
     counters[index].value = val;
-    console.log("counter #" + index + " has a value of " + counters[index].value);
+    console.log("counter at index " + index + " has a value of " + counters[index].value);
     this.setState({counters});
   }
 
@@ -53,6 +53,11 @@ class App extends Component {
     console.log("\nRESET");
     const counters = this.state.counters.map(c => {
       c.value = 0;
+      const id = c.id;
+      document.getElementById("check"+id).checked=true;
+      document.getElementById("btnIncr"+id).disabled=false;
+      document.getElementById("btnDecr"+id).disabled=false;
+      document.getElementById("btnDel"+id).disabled=false;
       return c;
     });
     this.setState({counters});
