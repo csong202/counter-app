@@ -14,6 +14,21 @@ class Counter extends Component {
   //   console.log("counter unmount");
   // }
   
+  /* Review Comment
+    General note on React event handlers, although it's not one even I always remember/bother to apply my self as it's often just a
+    marginal optimization (but potentially significant in some cases):
+
+    React can't see in to the implementation of a function. When comparing if two functions are equivalent, it only has the memory address to
+    go off of. As a result, any function declared inside the render method, like `onClick={() => this.props.onIncrement(this.props.counter)}`
+    will look like a new function on each re-render. That means every time this component renders, React will have to update the actual DOM
+    and replace the "old" event handler with the "new" one.
+
+    On the other hand, if the function is declared outside of the render method (e.g. as a class method), it will have a consistent identity
+    across renders and React will be able to smartly avoid pointlessly updating the actual DOM event handler.
+
+    Simillar applies to functions passed as props. If they're defined within a render method then they'll always look like a new prop to the child
+    component, which can result in unnecessary re-renders of pure components.
+  */
   render() {
     const {counter} = this.props;
     return (
@@ -54,6 +69,20 @@ class Counter extends Component {
     return "btnDel"+counterId;
   }
 
+  /* Review Comment
+    Could use template literals to write in one line:
+    ```
+      const classes = `badge m-2 badge-${this.props.counter.value === 0 ? "warning" : "primary"}`;
+    ```
+    Debatably clearer to read, avoids the `let` and mutation, which is just generally nice.
+
+    Bit of a side note on a more InfoBase specific thing, but we generally use this small utility for class name logic
+    this sort of logic See here: https://www.npmjs.com/package/classnames
+
+    Arguably it would be better not to construct a class name based on conditional logic, because it makes it harder to search through
+    the code base for instance of that class name... but we still do plenty of string construction (class names, text keys, etc) in the InfoBase
+    so I can't pretend that's a hard rule or anything, haha.
+  */
   getBadgeClasses() {
     let classes = "badge m-2 badge-";
     classes += this.props.counter.value === 0 ? "warning" : "primary";
