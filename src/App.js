@@ -46,11 +46,6 @@ class App extends Component {
     console.log("\nRESET");
     const counters = this.state.counters.map(c => {
       c.value = 0;
-      // const id = c.id;
-      // document.getElementById("check"+id).checked=true;
-      // document.getElementById("btnIncr"+id).disabled=false;
-      // document.getElementById("btnDecr"+id).disabled=false;
-      // document.getElementById("btnDel"+id).disabled=false;
       c.disabled = false;
       return c;
     });
@@ -71,6 +66,14 @@ class App extends Component {
     this.setState({counters}); // equiv to this.setState({ counters: counters})
   }
 
+  handleCheck = (counter) => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    console.log("\nHANDLE CHECK, index = " + index + ", " + (counter === undefined));
+    const newCounters = counters.map(c => c === index ? c.disabled = !c.disabled: c.disabled);
+    this.setState(newCounters);
+  }
+
   render() {
     console.log("App rendered")
     return (
@@ -84,6 +87,7 @@ class App extends Component {
             onDecrement={this.handleDecrement}
             onAdd={this.handleAdd}
             onDelete={this.handleDelete}
+            onCheck={this.handleCheck}
           />
         </main>
       </React.Fragment>
