@@ -8,17 +8,17 @@ class App extends Component {
 
   state = {
     counters: [
-      {id: 1, value: 4},
-      {id: 2, value: 0},
-      {id: 3, value: 0},
-      {id: 4, value: 0}
+      {id: 1, value: 4, disabled: false},
+      {id: 2, value: 0, disabled: false},
+      {id: 3, value: 0, disabled: false},
+      {id: 4, value: 0, disabled: false}
     ],
     lastId: 4
   };
 
   constructor() {
     super();
-    console.log("App construtor");
+    console.log("App constructor");
     // can set state directly with this.state = this.props.something
       // will only have access to props if it is passed as a param in the constructor and super
   }
@@ -30,34 +30,22 @@ class App extends Component {
   handleIncrement = counter => {
     console.log("\nINCREMENT");
     const counters = [...this.state.counters]; // cloning the counters array in the state object
-    const index = counters.indexOf(counter);
-    counters[index] = {...counter}; // cloning the counter object in argument
-    counters[index].value++;
-    console.log("counter at index " + index + " has a value of " + counters[index].value);
-    this.setState({counters})
+    const newCounters = counters.map(c => c === counter ? c.value++ : c.value);
+    this.setState({newCounters})
   }
 
   handleDecrement = counter => {
     console.log("\nDECREMENT");
     const counters = [...this.state.counters];
-    const index = counters.indexOf(counter);
-    counters[index] = {...counter};
-    let val = counters[index].value;
-    if (val > 0) {val--};
-    counters[index].value = val;
-    console.log("counter at index " + index + " has a value of " + counters[index].value);
-    this.setState({counters});
+    const newCounters = counters.map(c => c === counter ? c.value=Math.max(c.value-1, 0) : c.value);
+    this.setState({newCounters});
   }
 
   handleReset = () => {
     console.log("\nRESET");
     const counters = this.state.counters.map(c => {
       c.value = 0;
-      const id = c.id;
-      document.getElementById("check"+id).checked=true;
-      document.getElementById("btnIncr"+id).disabled=false;
-      document.getElementById("btnDecr"+id).disabled=false;
-      document.getElementById("btnDel"+id).disabled=false;
+      c.disabled = false;
       return c;
     });
     this.setState({counters});
@@ -66,11 +54,8 @@ class App extends Component {
   handleAdd = () => {
     console.log("\nADD, last id", this.state.lastId);
     const newLastId = this.state.lastId + 1;
-    var counters = [...this.state.counters];
-    counters.push({id: newLastId, value: 0});
-    // works with 2 separate setStates but not with 1?
-    this.setState({counters});
-    this.setState({lastId: newLastId});
+    const counters = [...this.state.counters, {id: newLastId, value: 0, disabled: false}];
+    this.setState({counters, lastId: newLastId});
     console.log("this.state.lastId", this.state.lastId);
   }
 
@@ -78,6 +63,15 @@ class App extends Component {
     console.log("deleting counter #", counterID);
     const counters = this.state.counters.filter(c => c.id !== counterID); // new array w/o specified counter
     this.setState({counters}); // equiv to this.setState({ counters: counters})
+  }
+
+  handleCheck = (e, counter) => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    console.log("\nHANDLE CHECK, index = " + index);
+    const newCounters = counters.map(c => c === counter ? c.disabled = !c.disabled: c.disabled);
+    this.setState(newCounters);
+    console.log(this.state.counters[index].disabled)
   }
 
   render() {
@@ -93,6 +87,7 @@ class App extends Component {
             onDecrement={this.handleDecrement}
             onAdd={this.handleAdd}
             onDelete={this.handleDelete}
+            onCheck={this.handleCheck}
           />
         </main>
       </React.Fragment>

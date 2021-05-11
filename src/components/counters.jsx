@@ -5,7 +5,7 @@ class Counters extends Component {
 
   render() {
     // object destructuring, only taking the parts we need 
-    const {onReset, counters, onIncrement, onDecrement, onAdd, onDelete} = this.props;
+    const {onReset, counters, onIncrement, onDecrement, onAdd, onDelete, onCheck} = this.props;
     return (
       <div>
         <button 
@@ -27,6 +27,7 @@ class Counters extends Component {
             onAdd={onAdd}
             onDelete={onDelete}
             counter={counter} // counter object has value and id
+            counters={counters}
           >  
             <div class="form-check">
               <label class="form-check-label">
@@ -34,8 +35,9 @@ class Counters extends Component {
                   type="checkbox" 
                   class="form-check-input" 
                   defaultChecked={true} 
+                  checked = {this.isChecked(counter, counters)}
                   id={this.getCheckBoxId(counter.id)}
-                  onClick={((e) => this.handleCheck(e, counter.id, counter))}
+                  onClick={(e) => this.props.onCheck(e, counter)}  // to avoid the maximum depth error
                 />Counter #{counter.id}
               </label>
             </div>
@@ -45,24 +47,10 @@ class Counters extends Component {
     );
   }
 
-  handleCheck = (e, counterId, counter) => {
-    console.log("clicked checkbox #" + counterId);
-    var btnIncr = document.getElementById("btnIncr"+counterId);
-    var btnDecr = document.getElementById("btnDecr"+counterId);
-    var btnDel = document.getElementById("btnDel"+counterId);
-
-    if (!btnIncr.disabled) {
-      console.log("was enabled");
-      btnIncr.disabled=true;
-      btnDecr.disabled=true;
-      btnDel.disabled=true;
-    }
-    else {
-      console.log("was disabled");
-      btnIncr.disabled=false;
-      btnDecr.disabled=false;
-      btnDel.disabled=false;
-    }
+  isChecked = (counter, counters) => {
+    const index = counters.indexOf(counter);
+    console.log("isChecked - ", !counters[index].disabled);
+    return !counters[index].disabled;
   }
 
   getCheckBoxId(counterId) {
