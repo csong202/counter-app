@@ -37,8 +37,7 @@ class App extends Component {
   handleDecrement = counter => {
     console.log("\nDECREMENT");
     const counters = [...this.state.counters];
-    // const newCounters = counters.map(c => c === counter ? Math.max(c.value-1, 0) : c.value);
-    const newCounters = counters.map(c => c === counter && c.value > 0 ? c.value--: c.value);
+    const newCounters = counters.map(c => c === counter ? c.value=Math.max(c.value-1, 0) : c.value);
     this.setState({newCounters});
   }
 
@@ -66,12 +65,13 @@ class App extends Component {
     this.setState({counters}); // equiv to this.setState({ counters: counters})
   }
 
-  handleCheck = (counter) => {
+  handleCheck = (e, counter) => {
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
-    console.log("\nHANDLE CHECK, index = " + index + ", " + (counter === undefined));
-    const newCounters = counters.map(c => c === index ? c.disabled = !c.disabled: c.disabled);
+    console.log("\nHANDLE CHECK, index = " + index);
+    const newCounters = counters.map(c => c === counter ? c.disabled = !c.disabled: c.disabled);
     this.setState(newCounters);
+    console.log(this.state.counters[index].disabled)
   }
 
   render() {

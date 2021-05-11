@@ -5,7 +5,6 @@ class Counters extends Component {
 
   render() {
     // object destructuring, only taking the parts we need 
-    // const {onReset, counters, onIncrement, onDecrement, onAdd, onDelete} = this.props;
     const {onReset, counters, onIncrement, onDecrement, onAdd, onDelete, onCheck} = this.props;
     return (
       <div>
@@ -27,7 +26,6 @@ class Counters extends Component {
             onDecrement={onDecrement}
             onAdd={onAdd}
             onDelete={onDelete}
-            onCheck={onCheck}
             counter={counter} // counter object has value and id
             counters={counters}
           >  
@@ -39,8 +37,7 @@ class Counters extends Component {
                   defaultChecked={true} 
                   checked = {this.isChecked(counter, counters)}
                   id={this.getCheckBoxId(counter.id)}
-                  // onClick={() => this.props.handleCheck(counter)}
-                  onClick={onCheck}
+                  onClick={(e) => this.props.onCheck(e, counter)}  // to avoid the maximum depth error
                 />Counter #{counter.id}
               </label>
             </div>

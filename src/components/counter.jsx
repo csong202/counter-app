@@ -22,7 +22,6 @@ class Counter extends Component {
         <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
         <button
           id={this.getBtnIncrId(counter.id)}
-          // onClick={() => this.props.onIncrement(this.props.counter)}
           onClick={this.incrementCounter.bind(this)}
           disabled={this.isBtnIncrDis(counter, counters)}
           className="btn btn-secondary btn-sm"
